@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d [%t] %-5level %logger{36}.%M\(%file:%line\) - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="mf" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <File>logs/qserver.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/qserver_bak.%d.%i.log</fileNamePattern>
+            <maxHistory>3</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>
+                %d %p (%file:%line\)- %m%n
+            </pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <logger name="com.boyaa.mf" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="mf"/>
+    </logger>
+    
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+    <!--
+    <root level="DEBUG">  
+    	<appender-ref ref="STDOUT" />  
+ 	 </root>
+ 	 -->
+</configuration>

@@ -1,0 +1,35 @@
+package apps.modules.netty;
+
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.Channel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PreDestroy;
+import java.net.InetSocketAddress;
+
+@Getter
+@Setter
+@RequiredArgsConstructor
+@Component
+public class TcpServer {
+    private final ServerBootstrap serverBootstrap;
+
+    private final InetSocketAddress tcpPort;
+
+    private Channel serverChannel;
+
+    public void start() throws Exception {
+        serverChannel =  serverBootstrap.bind(tcpPort).sync().channel().closeFuture().sync().channel();
+    }
+
+    @PreDestroy
+    public void stop() {
+        if ( serverChannel != null ) {
+            serverChannel.close();
+            serverChannel.parent().close();
+        }
+    }
+}
